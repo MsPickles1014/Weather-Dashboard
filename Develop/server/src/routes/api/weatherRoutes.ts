@@ -1,9 +1,8 @@
 import { Router, type Request, type Response } from 'express';
+const router = Router();
+
 import HistoryService from '../../service/historyService.js';  //handles storing and retrieving search history.
 import WeatherService from '../../service/weatherService.js';  //fetches weather data for a given city.
-
-
-const router = Router();
 
 const historyService = new HistoryService(); // Assuming this handles search history logic
 const weatherService = new WeatherService(); // Assuming this fetches weather data
