@@ -1,106 +1,74 @@
-gi
-import { promises as fs } from 'fs';
-import path from 'path';
+import { Router, type Request, type Response } from 'express';
+import historyService from '../../service/historyService.js';  //handles storing and retrieving search history.
+import weatherService from '../../service/weatherService.js';  //fetches weather data for a given city.
 
-//========================================>Define a City class with name and id properties<========================================
-class City {
-  name: string;
-  id: string;
+const router = Router();
 
-  constructor(name: string, id: string) {
-    this.name = name;
-    this.id = id;
+//============>Retrieve weather data for a city and save it to search history<=====================
+
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    const { city } = req.body;
+
+    ////// ================>Validate the city name<==================
+    if (!city || typeof city !== 'string') {
+      return res.status(400).json({ error: 'City name is required and must be a string' });
+    }
+
+    //////================>Fetch weather data<=========================
+
+    const weatherData = await weatherService.getWeatherByCity(city);// MAKE SURE NAMES MSTCH
+
+    //////================>Save city to search history<================
+
+    await historyService.addCity(new City(city, weatherData.id));
+
+
+    //==================>Respond with weather data<===========
+
+    res.status(200).json(weatherData);
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+    res.status(500).json({ error: 'Failed to retrieve weather data' });
   }
 }
+);
+//////======================>GET: Retrieve search history<==================
 
-//=====================================================>Complete the HistoryService class<==============================================
-class HistoryService {
-  private filePath: string;
+router.get('/history', async (req: Request, res: Response) => {
 
-  constructor() {
-    this.filePath = path.resolve('path/to/searchHistory.json');  // Set the path to the searchHistory.json file
+  try {
+
+    //////======================> Fetch search history<=============================
+
+    const history = await historyService.getCities();
+    //////===================>retrieve all previously searched cities<===============
+
+    res.status(200).json(history); // Responds with the search history as JSON.
   }
-
-  //===========================================> Private method to read the JSON file<==================================================
-
-  private async read(): Promise<City[]> {
-    try {
-      const data = await fs.readFile(this.filePath, 'utf8');
-      return JSON.parse(data) as City[];
-    } catch (err) {
-      if (err.code === 'ENOENT') {
-        return []; // If the file does not exist, return an empty array
-      }
-      console.error(`Error reading or parsing file: ${err.message}`);
-      throw err;
-    }
-  }
-
-  //================================> write method that writes the updated cities array to the searchHistory.json file<=================
-
-  private async write(cities: City[]): Promise<void> {
-    try {
-      await fs.writeFile(this.filePath, JSON.stringify(cities, null, 2));
-      console.log('Search history updated successfully.');
-    } catch (err) {
-      console.error('Error writing to file:', err.message);
-      throw err;
-    }
-  }
-
-  // ====================================================>Method to get all cities<=====================================================
-
-  public async getCities(): Promise<City[]> {
-    try {
-      return await this.read();
-    } catch (err) {
-      console.error(`Error fetching cities: ${err.message}`);
-      throw err;
-    }
-  }
-
-  //=======================================================> Method to add a city to the search history<=================================
-
-  public async addCity(city: City): Promise<void> {
-    try {
-      const cities = await this.getCities();
-
-      //=======> Check for duplication of cities<==================
-
-      if (cities.find((c) => c.id === city.id)) {
-        console.warn(`City with ID "${city.id}" already exists in history.`);
-        return;
-      }
-
-      cities.push(city);
-      await this.write(cities);
-      console.log(`City "${city.name}" added to search history.`);
-    } catch (err) {
-      console.error(`Error adding city: ${err.message}`);
-    }
-  }
-
-  //===================================================> Method to remove a city by ID<================================================
-
-  public async removeCity(id: string): Promise<void> {
-    try {
-      const cities = await this.getCities();
-
-      const updatedCities = cities.filter((city) => city.id !== id);
-
-      if (cities.length === updatedCities.length) {
-        console.warn(`City with ID "${id}" not found in search history.`);
-        return;
-      }
-
-      await this.write(updatedCities);
-      console.log(`City with ID "${id}" removed from search history.`);
-    } catch (err) {
-      console.error(`Error removing city: ${err.message}`);
-    }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to retrieve search history' });
   }
 }
+);
+// =============>* BONUS TODO: DELETE city from search history<============
 
-export default new HistoryService();
+router.delete('/history/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: 'City ID is required.' });
+    }
 
+    ///////////////////////// Delete the city from search history
 
+    await historyService.removeCity(id);
+
+     res.status(200).json({ message: 'City removed from search history.' });
+  } catch (error) {
+    console.error('Error deleting city:', error);
+    res.status(500).json({ error: 'Failed to delete city from search history' });
+  }
+});
+export default router;
