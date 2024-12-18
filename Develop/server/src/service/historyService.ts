@@ -2,21 +2,21 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 
-//========================================>Define a City class with name and id properties<========================================
+//============================> Define a City class with name and id properties <========================
 class City {
   name: string;
-  id: string;
+ 
 
-  constructor(name: string, id: string) {
-    if (!name || !id) {
-      throw new Error('City name and ID are required.');
+  constructor(name: string) {
+    if (!name ) {
+      throw new Error('City name ');
     }
     this.name = name;
-    this.id = id;
+   
   }
 }
 
-//=====================================================>Complete the HistoryService class<==============================================
+//===================================> Complete the HistoryService class <==============================
 class HistoryService {
   private readonly filePath: string;
 
@@ -24,7 +24,7 @@ class HistoryService {
     this.filePath = path.resolve(process.env.HISTORY_FILE || './searchHistory.json'); // Default to local file
   }
 
-  //===========================================> Private method to read the JSON file<==================================================
+  //=======================> Private method to read the JSON file <======================================
 
   private async read(): Promise<City[]> {
     try {
@@ -37,8 +37,8 @@ class HistoryService {
     }
   }
 
-  //================================> write method that writes the updated cities array to the searchHistory.json file<=================
-
+  //======> write method that writes the updated cities array to the searchHistory.json file <=========
+  
   private async write(cities: City[]): Promise<void> {
     try {
       await fs.writeFile(this.filePath, JSON.stringify(cities, null, 2));
@@ -48,36 +48,33 @@ class HistoryService {
     }
   }
 
-  // ====================================================>Method to get all cities<=====================================================
+  // ==============================> Method to get all cities< ========================================
+ 
   public async getCities(): Promise<City[]> {
     return this.read();
   }
 
-  //=======================================================> Method to add a city to the search history<=================================
+  //============================> Method to add a city to the search history<==========================
 
-  public async addCity(city: City): Promise<void> {
+  public async addCity(): Promise<void> {
     const cities = await this.getCities();
 
       //=======> Check for duplication of cities<==================
 
-      if (cities.some((c) => c.id === city.id)) {
-      console.warn(`City with ID "${city.id}" already exists.`);
+      if (cities.some((c) => c.name=== City.name)) {
+      console.warn(`City with ID "${City}" already exists.`);
       return;
     }
-    cities.push(city);
+    cities.push(City);
     await this.write(cities);
   }
 
 
-  //===================================================> Method to remove a city by ID<================================================
+  //================================> Method to remove a city by ID <==================================
 
-  public async removeCity(id: string): Promise<void> {
+  public async removeCity(): Promise<void> {
     const cities = await this.getCities();
-    const updatedCities = cities.filter((city) => city.id !== id);
-    if (cities.length === updatedCities.length) {
-      console.warn(`City with ID "${id}" not found.`);
-      return;
-    }
+    const updatedCities = cities.filter((city) => city.name!);
     await this.write(updatedCities);
   }
 }
