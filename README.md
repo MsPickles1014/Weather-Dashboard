@@ -6,38 +6,39 @@ A dynamic and interactive weather dashboard application that provides real-time 
 
 ## Table of Contents
 
-Features
-Technologies Used
-Installation
-Usage
-Screenshots
-License
-Contributing
-Contact
+  * Features
+  * Technologies Used
+  * Installation
+  * Usage
+  * Screenshots
+  * License
+  * Contributing
+  * Contact
 
 ## Features
 
-```md
-GIVEN a weather dashboard with form inputs
+  * Search for current weather conditions by city or location.
+  * View a 5-day weather forecast.
+  * Display additional details like temperature, humidity, wind speed, and UV index.
+  * Responsive design for optimal viewing on desktop and mobile devices.
+  * Interactive user interface with dynamic updates.
+## Technologies Used
 
-WHEN I search for a city
+FRONTEND:
+  * React
+  * Vite for fast builds
+  * CSS for styling
+BACKEND:
+  * Node.js
+  * Express
+APIs:
+  * OpenWeatherMap API for real-time weather data
+BUILD TOOLS:
+  * TypeScript for type safety
+  * npm for package management
 
-THEN I am presented with current and future conditions for that city, and that city is added to the search history
 
-WHEN I view current weather conditions for that city
-
-THEN I am presented with the city name, the date, an icon representation of weather conditions, a description of the weather for the icon's alt tag, the temperature, the humidity, and the wind speed
-
-WHEN I view future weather conditions for that city
-
-THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
-
-WHEN I click on a city in the search history
-
-THEN I am again presented with current and future conditions for that city
-```
-
-## Mock-Up
+# Mock Up
 
 The following image shows the web application's appearance and functionality:
 
@@ -61,93 +62,52 @@ Refer to the [Full-Stack Blog on deploying to Render](https://coding-boot-camp.g
 
 ---
 
-## 💡 Hints
+## Installation
 
-* Using the 5-day weather forecast API, you'll notice that you'll need to pass in coordinates instead of just a city name. Using the OpenWeatherMap APIs, how could we retrieve geographical coordinates given a city name?
+1. Clone the repository:
+     *  git clone https://github.com/MsPickles1014/weather-dashboard.git
+       
+2. Navigate to the project directory:
+     *  cd weather-dashboard
+       
+3. Install dependencies for the server and client:
+     *  cd server && npm install
+     *  cd ../client && npm install
 
-* How could we make the OpenWeather API calls server-side, parse the data, and then send the parsed data client-side?
+4. Create a .env file in the server directory and add the following:
+     * PORT=3001
+     * WEATHER_API_KEY=your_openweathermap_api_key
 
-## 🏆 Bonus
+## Usage
 
-This application offers the DELETE functionality on the front end. As a bonus, try to add the DELETE route to the application using the following guideline:
+1.  Build the client and start the server:
+      * npm run start
+        
+2.  Open your browser and navigate to:
+      * http://localhost:3001
+        
+3.  Search for a city or location to view weather data.
 
-* `DELETE /api/weather/history/:id` should receive a route parameter that contains the id of a city name to delete. To delete a city, you'll need to read all the cities from the `searchHistory.json` file, remove the city with the given `id` property, and then rewrite the cities to the `searchHistory.json` file.
+## Render URL:
+      * postgresql://weather_dashboard_user:wnbMPsMjyQ17So4bcY15nKXRZRBEP08s@dpg-ctsil3d2ng1s73c1f32g-a.ohio-postgres.render.com/weather_dashboard
 
----
 
-## Grading Requirements
+## Contributing
 
-> **Note** If a Challenge assignment submission is marked as “0”, it's considered incomplete and won't count toward your graduation requirements. Examples of incomplete submissions include the following:
+> **Note**  💡 Contributions are welcome! Please follow these steps:
+> * Fork the repository.
 >
-> * A repository that has no code.
+> * Create a new branch (git checkout -b feature-name)..
 >
-> * A repository that includes a unique name but nothing else.
+> * Commit your changes (git commit -m "Add some feature").
 >
-> * A repository that includes only a README file but nothing else.
->
-> * A repository that includes only starter code.
+> * Push to the branch (git push origin feature-name)..
 
-This Challenge is graded based on the following criteria:
+> * Open a pull request.
 
-### Technical Acceptance Criteria: 40%
+### Contact
 
-The Challenge satisfies all of the above acceptance criteria, plus the following:
+Noela Deane
+Email: Noeladnelson@gmail.com
+GitHub: @MsPickles1014
 
-* Application uses the OpenWeather API to retrieve weather data.
-
-* Application back end must store cities that have a unique id in a JSON file.
-
-* Application must be deployed to Render.
-
-### Deployment: 32%
-
-The Challenge satisfies all of the above acceptance criteria, plus the following:
-
-* Application deployed at live URL.
-
-* Application loads with no errors.
-
-* Application GitHub URL submitted.
-
-* GitHub repository that contains application code.
-
-### Application Quality: 15%
-
-The Challenge satisfies all of the above acceptance criteria, plus the following:
-
-* Application user experience is intuitive and easy to navigate.
-
-* Application user interface style is clean and polished.
-
-* Application resembles the mock-up functionality provided in the Challenge instructions.
-
-### Repository Quality: 13%
-
-The Challenge satisfies all of the above acceptance criteria, plus the following:
-
-* Repository has a unique name.
-
-* Repository follows best practices for file structure and naming conventions.
-
-* Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
-
-* Repository contains multiple descriptive commit messages.
-
-* Repository contains quality README file with description, screenshot, and link to deployed application.
-
-### Bonus: +10 Points
-
-Fulfilling the following can add up to 10 points to your grade. Note that the highest grade you can achieve is still 100:
-
-* Application allows users to delete cities.
-
-## Review
-
-You are required to submit BOTH of the following for review:
-
-* The URL of the functional, deployed application.
-
-* The URL of the GitHub repository. Give the repository a unique name and include a README file describing the project.
-
----
-© 2024 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
