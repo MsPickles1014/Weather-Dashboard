@@ -107,7 +107,7 @@ Refer to the [Full-Stack Blog on deploying to Render](https://coding-boot-camp.g
 
 ## Contact
 
-Noela Deane
-Email: Noeladnelson@gmail.com
-GitHub: @MsPickles1014
+ * Noela Deane
+ * Email: Noeladnelson@gmail.com
+ * GitHub: @MsPickles1014
 
